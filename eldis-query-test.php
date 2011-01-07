@@ -13,4 +13,22 @@ assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/fu
 $q->format = 'xml';
 assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/full.xml', $q->get_url());
 
+
+$q->author = 'lopez';
+assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/author/lopez/full.xml', $q->get_url());
+
+
+$q->publisher = 'random';
+assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/author/lopez/publisher/random/full.xml', $q->get_url());
+
+$q->author = NULL;
+assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/publisher/random/full.xml', $q->get_url());
+
+
+$q->theme = 101;
+assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/publisher/random/theme/101/full.xml', $q->get_url());
+
+$q->publisher = NULL;
+assertEquals('http://api.ids.ac.uk/searchapi/index.cfm/search/object/document/theme/101/full.xml', $q->get_url());
+
 testComplete();
