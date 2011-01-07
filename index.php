@@ -1,5 +1,6 @@
 <?
 require_once('.conf.php');
+require_once('demo.php');
 require_once('eldis.php');
 
 demo_header_print();
