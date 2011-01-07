@@ -28,7 +28,7 @@ function lg_print() {
 function getJson($destination) {
 	global $eldis_username, $eldis_password;
 
-	if($destination instanceof EldisQuery) {
+	if($destination instanceof EldisQuery || $destination instanceof EldisCategoryQuery) {
 		$url = $destination->get_url();
 	} else {
 		$url = $destination;
@@ -70,13 +70,57 @@ function eldis_search($search_term, $max_records=NULL) {
 	$q->size = 'full';
 	return getJson($q);
 }
-
+	
 function eldis_get_title($doc) {
 	return $doc->title;
 }
 
 function eldis_get_url($doc) {
 	return $doc->document_urls[0]->locationUrl;
+}
+
+function eldis_get_base_categories() {
+	lg("Getting base categories...");
+	$q = new EldisCategoryQuery();
+	$q->name = 'theme';
+	$json = getJson($q);
+	lg("Fetched: " . sizeof($json));
+	$categories = array();
+	foreach($json as $j) {
+		$categories[] = new EldisCategory($j);
+	}
+	return $categories;
+}
+
+class EldisCategory {
+	private $json;
+	function __construct($json) {
+		$this->json = $json;
+	}
+	public function get_name() {
+		return $this->json->name;
+	}
+	public function get_id() {
+		return $this->json->id;
+	}
+}
+
+class EldisCategoryQuery {
+	const BASE_URL = 'http://api.ids.ac.uk/searchapi/index.cfm/category';
+
+	public $id;
+	public $name;
+	public $format = 'json';
+
+	public function get_url() {
+		$url = '';
+		
+		if($this->id !== NULL) $url .= '/id/' . ($this->id + 0);
+		if($this->name !== NULL) $url .= '/name/' . $this->name;
+
+		$format = $this->format;
+		return self::BASE_URL . $url . '/category.' . $format;
+	}
 }
 
 class EldisQuery {

@@ -23,6 +23,18 @@ demo_header_print();
 			?>
 			</ol>
 		</div>
+
+		<div>
+			<h2>Categories</h2>
+			<ul>
+			<?
+				foreach(eldis_get_base_categories() as $cat) {
+					$name = $cat->get_name();
+					echo "<li>$name</li>";
+				}
+			?>
+			</ul>
+		</div>
 <?
 demo_footer_print();
 ?>
