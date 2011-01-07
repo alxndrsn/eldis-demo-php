@@ -73,4 +73,27 @@ function eldis_get_url($doc) {
 	return $doc->document_urls[0]->locationUrl;
 }
 
+class EldisQuery {
+	const BASE_URL = 'http://api.ids.ac.uk/searchapi/index.cfm/search/object/document';
+
+	public $author;
+	public $publisher;
+	public $theme;
+	public $pubdate;
+	public $noRecords;
+	public $startPosition;
+	public $format = 'json';
+	public $size = 'short';
+
+	public function get_url() {
+		$url = '';
+
+		if($this->author !== NULL) $url .= 'author/' . $this->author;
+
+		$size = $this->size;
+		$format = $this->format;
+		return self::BASE_URL . $url . "/$size.$format";
+	}
+}
+
 ?>
